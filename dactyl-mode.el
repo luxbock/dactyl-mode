@@ -55,21 +55,12 @@
   '((default :inherit font-lock-variable-name-face))
   "Face used for Pentadactyl's configuration options.")
 
-(defface dactyl-function-builtin
-  '((default :inherit font-lock-builtin-face))
-  "Face used for Pentadactyl's built-in functions.")
-
 (defface dactyl-command
   '((default :inherit font-lock-keyword-face))
   "Face used for Pentadactyl Ex commands.")
 
-(defface dactyl-special-face
-  '((t :foreground "orange"))
-  "Face used to highlight undeclared variable identifiers.")
 
-
 ;; Font lock linking
-
 (defvar dactyl-font-lock-keywords
   `(
     ;; Line comment
@@ -392,7 +383,6 @@
                  "yankshort") 'words))
      2 '(face dactyl-option))
 
-    ;; Built-in functions
     ;; Operators start:
     (,(concat "\\("
               ;; word char
@@ -414,17 +404,12 @@
     )
   "Default expressions to highlight in dactyl-mode.")
 
-
 ;; Support for Pentadactyl script
 
 (defvar dactyl-mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?\" "." table)
     table))
-
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.vim\\'" . dactyl-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("[._]?g?dactyl\\'" . dactyl-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.exrc\\'" . dactyl-mode))
 
 (defalias 'dactyl--parent-mode
   (if (fboundp 'prog-mode) #'prog-mode #'fundamental-mode))
@@ -434,10 +419,9 @@
   "Major mode for editing Pentadactyl configuration files."
   :group 'dactyl-mode
   :syntax-table dactyl-mode-syntax-table
-  (setq-local font-lock-defaults '(dactyl-font-lock-keywords))
-  (setq-local comment-start "\"")
-  (setq-local comment-end "")
-  (run-hooks 'dactyl-mode-hook))
+  (set (make-local-variable 'font-lock-defaults) '(dactyl-font-lock-keywords))
+  (set (make-local-variable 'comment-start) "\"")
+  (set (make-local-variable 'comment-end) ""))
 
 (provide 'dactyl-mode)
 
